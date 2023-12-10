@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "dap-synapse-test1"
+		},
+		"StorageAccount_connectionString": {
+			"value": "DefaultEndpointsProtocol=https;AccountName=dapsatest01;"
+		},
+		"dap-synapse-test1-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:dap-synapse-test1.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"ls_asqlmi_dap_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=dap-synapse-test1.sql.azuresynapse.net;Initial Catalog=dapsqlpooltest1;User ID=sqladminnew"
+		},
+		"ls_sql_WWI_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pbi-poc-sql-server.database.windows.net;Initial Catalog=WideWorldImportersDW-Standard;User ID=sqladminnew"
+		},
+		"ls_sql_imis_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=dap-synapse-test1.sql.azuresynapse.net;Initial Catalog=dapsqlpooltest1;User ID=sqladminnew"
+		},
+		"Get Product Data_properties_typeProperties_url": {
+			"value": "https://dummyjson.com/products"
+		},
+		"LS_AKV_properties_typeProperties_baseUrl": {
+			"value": "https://dap-akv.vault.azure.net/"
+		},
+		"dap-synapse-test1-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://dapsatest01.dfs.core.windows.net"
+		},
+		"ls_adls_raw_properties_typeProperties_url": {
+			"value": "https://dapsatest01.dfs.core.windows.net/"
+		}
+	}
+}
