@@ -1,0 +1,26 @@
+{
+	"name": "relationship-pjmshqwndq",
+	"properties": {
+		"Name": "relationship-pjmshqwndq",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Manufacturer",
+		"ToTableName": "ManufacturerFacility",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "ManufacturerId",
+				"ToColumnName": "ManufacturerId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Manufacturer.cdm.json/Manufacturer\",\"toEntity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"joinPairs\":[{\"fromAttribute\":\"ManufacturerId\",\"toAttribute\":\"ManufacturerId\"}]}}"
+		}
+	},
+	"type": "RELATIONSHIP"
+}

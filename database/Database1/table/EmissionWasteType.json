@@ -1,0 +1,150 @@
+{
+	"name": "EmissionWasteType",
+	"properties": {
+		"Name": "EmissionWasteType",
+		"EntityType": "TABLE",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Description": "The type of emission waste:\n\nEx:\n- cardboard\n- food waste\n- waste water\n- solid waste\n- third-party disposal waste\n\nEmissions from waste depend on the type of waste being disposed of, and the waste diversion method. \n\nCompanies should collect:\n\n- Waste type-specific and waste treatment-specific emission factors. The emission factors should include end-of-life processes only. Emission factors may include emissions from transportation of waste.",
+		"TableType": "EXTERNAL",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"StorageDescriptor": {
+			"Columns": [
+				{
+					"Name": "EmissionWasteTypeId",
+					"Description": "The unique identifier of a waste type.",
+					"BaseAttributeReference": {
+						"Entity": "EmissionWasteType.cdm.json/EmissionWasteType",
+						"Name": "EmissionWasteTypeId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "EmissionWasteTypeName",
+					"Description": "The name of a waste type.",
+					"BaseAttributeReference": {
+						"Entity": "EmissionWasteType.cdm.json/EmissionWasteType",
+						"Name": "EmissionWasteTypeName"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 256,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "EmissionWasteTypeDescription",
+					"Description": "The description of a waste type.",
+					"BaseAttributeReference": {
+						"Entity": "EmissionWasteType.cdm.json/EmissionWasteType",
+						"Name": "EmissionWasteTypeDescription"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 2048,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "EmissionWasteTypeEmissionFactorUnits",
+					"Description": "The number of water type emission factor units.",
+					"BaseAttributeReference": {
+						"Entity": "EmissionWasteType.cdm.json/EmissionWasteType",
+						"Name": "EmissionWasteTypeEmissionFactorUnits"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "EmissionWasteTypeEmissionFactorUomId",
+					"Description": "The unique identifier associated with the waste type emission factor unit of measure.",
+					"BaseAttributeReference": {
+						"Entity": "EmissionWasteType.cdm.json/EmissionWasteType",
+						"Name": "EmissionWasteTypeEmissionFactorUomId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				}
+			],
+			"Format": {
+				"InputFormat": "org.apache.hadoop.mapred.SequenceFileInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat",
+				"FormatType": "csv",
+				"SerializeLib": "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+				"Properties": {
+					"path": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/EmissionWasteType",
+					"delimiter": ",",
+					"multiLine": "false",
+					"firstRowAsHeader": "false",
+					"serialization.format": "1",
+					"escape": "\\",
+					"quote": "\"",
+					"FormatTypeSetToDatabaseDefault": true,
+					"header": "false"
+				}
+			},
+			"Source": {
+				"Provider": "ADLS",
+				"Location": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/EmissionWasteType",
+				"Properties": {
+					"LinkedServiceName": "dap-synapse-test1-WorkspaceDefaultStorage",
+					"LocationSetToDatabaseDefault": true
+				}
+			},
+			"Properties": {
+				"textinputformat.record.delimiter": ",",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"EmissionWasteTypeId\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeId\"},\"EmissionWasteTypeName\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeName\"},\"EmissionWasteTypeDescription\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeDescription\"},\"EmissionWasteTypeEmissionFactorUnits\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeEmissionFactorUnits\"},\"EmissionWasteTypeEmissionFactorUomId\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeEmissionFactorUomId\"}}}"
+			},
+			"Compressed": false,
+			"IsStoredAsSubdirectories": false
+		},
+		"Properties": {
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"EmissionWasteType\",\"path\":\"EmissionWasteType.cdm.json/EmissionWasteType\"},\"description\":\"The type of emission waste:\\n\\nEx:\\n- cardboard\\n- food waste\\n- waste water\\n- solid waste\\n- third-party disposal waste\\n\\nEmissions from waste depend on the type of waste being disposed of, and the waste diversion method. \\n\\nCompanies should collect:\\n\\n- Waste type-specific and waste treatment-specific emission factors. The emission factors should include end-of-life processes only. Emission factors may include emissions from transportation of waste.\",\"primaryKey\":[\"EmissionWasteTypeId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a waste type.\",\"isNullable\":false,\"name\":\"EmissionWasteTypeId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of a waste type.\",\"isNullable\":true,\"name\":\"EmissionWasteTypeName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeDescription\"},\"dataType\":\"string\",\"dataTypeLength\":2048,\"description\":\"The description of a waste type.\",\"isNullable\":true,\"name\":\"EmissionWasteTypeDescription\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeEmissionFactorUnits\"},\"dataType\":\"integer\",\"description\":\"The number of water type emission factor units.\",\"isNullable\":true,\"name\":\"EmissionWasteTypeEmissionFactorUnits\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"EmissionWasteType.cdm.json/EmissionWasteType\",\"name\":\"EmissionWasteTypeEmissionFactorUomId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier associated with the waste type emission factor unit of measure.\",\"isNullable\":true,\"name\":\"EmissionWasteTypeEmissionFactorUomId\"}]}}}",
+			"Description": "The type of emission waste:\n\nEx:\n- cardboard\n- food waste\n- waste water\n- solid waste\n- third-party disposal waste\n\nEmissions from waste depend on the type of waste being disposed of, and the waste diversion method. \n\nCompanies should collect:\n\n- Waste type-specific and waste treatment-specific emission factors. The emission factors should include end-of-life processes only. Emission factors may include emissions from transportation of waste.",
+			"DisplayFolderInfo": "{\"name\":\"Manufacturing\",\"colorCode\":\"#00727A\"}",
+			"PrimaryKeys": "EmissionWasteTypeId",
+			"spark.sql.sources.provider": "csv",
+			"sql:IsAppendOnly": false
+		},
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false
+	},
+	"type": "TABLE"
+}

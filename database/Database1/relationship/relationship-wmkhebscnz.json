@@ -1,0 +1,26 @@
+{
+	"name": "relationship-wmkhebscnz",
+	"properties": {
+		"Name": "relationship-wmkhebscnz",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "CostCategory",
+		"ToTableName": "CostType",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "CostCategoryId",
+				"ToColumnName": "CostCategoryId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"CostCategory.cdm.json/CostCategory\",\"toEntity\":\"CostType.cdm.json/CostType\",\"joinPairs\":[{\"fromAttribute\":\"CostCategoryId\",\"toAttribute\":\"CostCategoryId\"}]}}"
+		}
+	},
+	"type": "RELATIONSHIP"
+}

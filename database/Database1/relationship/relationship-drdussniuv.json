@@ -1,0 +1,26 @@
+{
+	"name": "relationship-drdussniuv",
+	"properties": {
+		"Name": "relationship-drdussniuv",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "ManufacturerFacility",
+		"ToTableName": "ManufacturerLot",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "ManufacturerId",
+				"ToColumnName": "ManufacturerId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"toEntity\":\"ManufacturerLot.cdm.json/ManufacturerLot\",\"joinPairs\":[{\"fromAttribute\":\"ManufacturerId\",\"toAttribute\":\"ManufacturerId\"}]}}"
+		}
+	},
+	"type": "RELATIONSHIP"
+}

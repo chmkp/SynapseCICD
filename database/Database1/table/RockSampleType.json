@@ -1,0 +1,116 @@
+{
+	"name": "RockSampleType",
+	"properties": {
+		"Name": "RockSampleType",
+		"EntityType": "TABLE",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Description": "The type of sample.\n\nEx:\n- Core Sample\n- Back Sample\n- Bulk Sample\n- Channel Sample\n- Chip Sample\n- Point Sample\n- Linear Sample\n- Panel Sample\n\nwhere:\n\nCORE SAMPLE\nA cylindrical section of (usually) a naturally occurring substance. Most core samples are obtained by drilling with special drills into the substance.\n\nBACK SAMPLE\nRock chips collected from the roof or back of an underground opening for the purpose of determining grade.\n\nBULK SAMPLE\nA large sample of mineralized rock, frequently hundreds of tonnes, selected in such a manner as to be representative of the potential orebody being sampled. Used to determine metallurgical characteristics.  \n\nCHANNEL SAMPLE\nA sample composed of pieces of vein or mineral deposit that have been cut out of a small trench or channel, usually about 10 cm wide and 2 cm deep.  \n\nCHIP SAMPLE\nA method of sampling a rock exposure whereby a regular series of small chips of rock is broken off along a line across the face.  \n\nPOINT SAMPLES\nThis is can be a single grab sample chosen to represent some mass; or it can be random samples taken from various source points, generally within a predetermined area, and can be either in two dimensions or three dimensions (i.e. dump pile) and composited.\n\nLINEAR SAMPLES\nContinuous sampling over an interval in a line such as channel samples or drill hole samples, and profile sampling of overburden.\n\nPANEL SAMPLES\nThese are planar samples made up of multiple chips collected from a surface with dimensions (i.e. one by two meters).",
+		"TableType": "EXTERNAL",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"StorageDescriptor": {
+			"Columns": [
+				{
+					"Name": "SampleTypeId",
+					"Description": "The unique identifier of a sample type.",
+					"BaseAttributeReference": {
+						"Entity": "RockSampleType.cdm.json/RockSampleType",
+						"Name": "SampleTypeId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "SampleTypeName",
+					"Description": "The name of a sample type.",
+					"BaseAttributeReference": {
+						"Entity": "RockSampleType.cdm.json/RockSampleType",
+						"Name": "SampleTypeName"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 256,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "SampleTypeDescription",
+					"Description": "The description of a sample type.",
+					"BaseAttributeReference": {
+						"Entity": "RockSampleType.cdm.json/RockSampleType",
+						"Name": "SampleTypeDescription"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 2048,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				}
+			],
+			"Format": {
+				"InputFormat": "org.apache.hadoop.mapred.SequenceFileInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat",
+				"FormatType": "csv",
+				"SerializeLib": "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+				"Properties": {
+					"path": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/RockSampleType",
+					"delimiter": ",",
+					"multiLine": "false",
+					"firstRowAsHeader": "false",
+					"serialization.format": "1",
+					"escape": "\\",
+					"quote": "\"",
+					"FormatTypeSetToDatabaseDefault": true,
+					"header": "false"
+				}
+			},
+			"Source": {
+				"Provider": "ADLS",
+				"Location": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/RockSampleType",
+				"Properties": {
+					"LinkedServiceName": "dap-synapse-test1-WorkspaceDefaultStorage",
+					"LocationSetToDatabaseDefault": true
+				}
+			},
+			"Properties": {
+				"textinputformat.record.delimiter": ",",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"SampleTypeId\":{\"entity\":\"RockSampleType.cdm.json/RockSampleType\",\"name\":\"SampleTypeId\"},\"SampleTypeName\":{\"entity\":\"RockSampleType.cdm.json/RockSampleType\",\"name\":\"SampleTypeName\"},\"SampleTypeDescription\":{\"entity\":\"RockSampleType.cdm.json/RockSampleType\",\"name\":\"SampleTypeDescription\"}}}"
+			},
+			"Compressed": false,
+			"IsStoredAsSubdirectories": false
+		},
+		"Properties": {
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"RockSampleType\",\"path\":\"RockSampleType.cdm.json/RockSampleType\"},\"description\":\"The type of sample.\\n\\nEx:\\n- Core Sample\\n- Back Sample\\n- Bulk Sample\\n- Channel Sample\\n- Chip Sample\\n- Point Sample\\n- Linear Sample\\n- Panel Sample\\n\\nwhere:\\n\\nCORE SAMPLE\\nA cylindrical section of (usually) a naturally occurring substance. Most core samples are obtained by drilling with special drills into the substance.\\n\\nBACK SAMPLE\\nRock chips collected from the roof or back of an underground opening for the purpose of determining grade.\\n\\nBULK SAMPLE\\nA large sample of mineralized rock, frequently hundreds of tonnes, selected in such a manner as to be representative of the potential orebody being sampled. Used to determine metallurgical characteristics.  \\n\\nCHANNEL SAMPLE\\nA sample composed of pieces of vein or mineral deposit that have been cut out of a small trench or channel, usually about 10 cm wide and 2 cm deep.  \\n\\nCHIP SAMPLE\\nA method of sampling a rock exposure whereby a regular series of small chips of rock is broken off along a line across the face.  \\n\\nPOINT SAMPLES\\nThis is can be a single grab sample chosen to represent some mass; or it can be random samples taken from various source points, generally within a predetermined area, and can be either in two dimensions or three dimensions (i.e. dump pile) and composited.\\n\\nLINEAR SAMPLES\\nContinuous sampling over an interval in a line such as channel samples or drill hole samples, and profile sampling of overburden.\\n\\nPANEL SAMPLES\\nThese are planar samples made up of multiple chips collected from a surface with dimensions (i.e. one by two meters).\",\"primaryKey\":[\"SampleTypeId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"RockSampleType.cdm.json/RockSampleType\",\"name\":\"SampleTypeId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a sample type.\",\"isNullable\":false,\"name\":\"SampleTypeId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"RockSampleType.cdm.json/RockSampleType\",\"name\":\"SampleTypeName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of a sample type.\",\"isNullable\":true,\"name\":\"SampleTypeName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"RockSampleType.cdm.json/RockSampleType\",\"name\":\"SampleTypeDescription\"},\"dataType\":\"string\",\"dataTypeLength\":2048,\"description\":\"The description of a sample type.\",\"isNullable\":true,\"name\":\"SampleTypeDescription\"}]}}}",
+			"Description": "The type of sample.\n\nEx:\n- Core Sample\n- Back Sample\n- Bulk Sample\n- Channel Sample\n- Chip Sample\n- Point Sample\n- Linear Sample\n- Panel Sample\n\nwhere:\n\nCORE SAMPLE\nA cylindrical section of (usually) a naturally occurring substance. Most core samples are obtained by drilling with special drills into the substance.\n\nBACK SAMPLE\nRock chips collected from the roof or back of an underground opening for the purpose of determining grade.\n\nBULK SAMPLE\nA large sample of mineralized rock, frequently hundreds of tonnes, selected in such a manner as to be representative of the potential orebody being sampled. Used to determine metallurgical characteristics.  \n\nCHANNEL SAMPLE\nA sample composed of pieces of vein or mineral deposit that have been cut out of a small trench or channel, usually about 10 cm wide and 2 cm deep.  \n\nCHIP SAMPLE\nA method of sampling a rock exposure whereby a regular series of small chips of rock is broken off along a line across the face.  \n\nPOINT SAMPLES\nThis is can be a single grab sample chosen to represent some mass; or it can be random samples taken from various source points, generally within a predetermined area, and can be either in two dimensions or three dimensions (i.e. dump pile) and composited.\n\nLINEAR SAMPLES\nContinuous sampling over an interval in a line such as channel samples or drill hole samples, and profile sampling of overburden.\n\nPANEL SAMPLES\nThese are planar samples made up of multiple chips collected from a surface with dimensions (i.e. one by two meters).",
+			"DisplayFolderInfo": "{\"name\":\"Manufacturing\",\"colorCode\":\"#00727A\"}",
+			"PrimaryKeys": "SampleTypeId",
+			"spark.sql.sources.provider": "csv",
+			"sql:IsAppendOnly": false
+		},
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false
+	},
+	"type": "TABLE"
+}

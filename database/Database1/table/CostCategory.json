@@ -1,0 +1,116 @@
+{
+	"name": "CostCategory",
+	"properties": {
+		"Name": "CostCategory",
+		"EntityType": "TABLE",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Description": "A categorization of costs.\n\nEx:\n- Variable Cost\n- Fixed Cost\n- Semi-Variable Cost",
+		"TableType": "EXTERNAL",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"StorageDescriptor": {
+			"Columns": [
+				{
+					"Name": "CostCategoryId",
+					"Description": "The unique identifier of a Cost Category.",
+					"BaseAttributeReference": {
+						"Entity": "CostCategory.cdm.json/CostCategory",
+						"Name": "CostCategoryId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "CostCategoryName",
+					"Description": "The name of a Cost Category.",
+					"BaseAttributeReference": {
+						"Entity": "CostCategory.cdm.json/CostCategory",
+						"Name": "CostCategoryName"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 256,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "CostCategoryDescription",
+					"Description": "The description of a Cost Category.",
+					"BaseAttributeReference": {
+						"Entity": "CostCategory.cdm.json/CostCategory",
+						"Name": "CostCategoryDescription"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 2048,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				}
+			],
+			"Format": {
+				"InputFormat": "org.apache.hadoop.mapred.SequenceFileInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat",
+				"FormatType": "csv",
+				"SerializeLib": "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+				"Properties": {
+					"path": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/CostCategory",
+					"delimiter": ",",
+					"multiLine": "false",
+					"firstRowAsHeader": "false",
+					"serialization.format": "1",
+					"escape": "\\",
+					"quote": "\"",
+					"FormatTypeSetToDatabaseDefault": true,
+					"header": "false"
+				}
+			},
+			"Source": {
+				"Provider": "ADLS",
+				"Location": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/CostCategory",
+				"Properties": {
+					"LinkedServiceName": "dap-synapse-test1-WorkspaceDefaultStorage",
+					"LocationSetToDatabaseDefault": true
+				}
+			},
+			"Properties": {
+				"textinputformat.record.delimiter": ",",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"CostCategoryId\":{\"entity\":\"CostCategory.cdm.json/CostCategory\",\"name\":\"CostCategoryId\"},\"CostCategoryName\":{\"entity\":\"CostCategory.cdm.json/CostCategory\",\"name\":\"CostCategoryName\"},\"CostCategoryDescription\":{\"entity\":\"CostCategory.cdm.json/CostCategory\",\"name\":\"CostCategoryDescription\"}}}"
+			},
+			"Compressed": false,
+			"IsStoredAsSubdirectories": false
+		},
+		"Properties": {
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"CostCategory\",\"path\":\"CostCategory.cdm.json/CostCategory\"},\"description\":\"A categorization of costs.\\n\\nEx:\\n- Variable Cost\\n- Fixed Cost\\n- Semi-Variable Cost\",\"primaryKey\":[\"CostCategoryId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CostCategory.cdm.json/CostCategory\",\"name\":\"CostCategoryId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Cost Category.\",\"isNullable\":false,\"name\":\"CostCategoryId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CostCategory.cdm.json/CostCategory\",\"name\":\"CostCategoryName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of a Cost Category.\",\"isNullable\":true,\"name\":\"CostCategoryName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CostCategory.cdm.json/CostCategory\",\"name\":\"CostCategoryDescription\"},\"dataType\":\"string\",\"dataTypeLength\":2048,\"description\":\"The description of a Cost Category.\",\"isNullable\":true,\"name\":\"CostCategoryDescription\"}]}}}",
+			"Description": "A categorization of costs.\n\nEx:\n- Variable Cost\n- Fixed Cost\n- Semi-Variable Cost",
+			"DisplayFolderInfo": "{\"name\":\"Manufacturing\",\"colorCode\":\"#00727A\"}",
+			"PrimaryKeys": "CostCategoryId",
+			"spark.sql.sources.provider": "csv",
+			"sql:IsAppendOnly": false
+		},
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false
+	},
+	"type": "TABLE"
+}

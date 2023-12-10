@@ -1,0 +1,26 @@
+{
+	"name": "relationship-djqedjgebj",
+	"properties": {
+		"Name": "relationship-djqedjgebj",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Manufacturer",
+		"ToTableName": "ManufacturerLot",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "ManufacturerId",
+				"ToColumnName": "ManufacturerId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Manufacturer.cdm.json/Manufacturer\",\"toEntity\":\"ManufacturerLot.cdm.json/ManufacturerLot\",\"joinPairs\":[{\"fromAttribute\":\"ManufacturerId\",\"toAttribute\":\"ManufacturerId\"}]}}"
+		}
+	},
+	"type": "RELATIONSHIP"
+}

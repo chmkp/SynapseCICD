@@ -1,0 +1,116 @@
+{
+	"name": "MaterialType",
+	"properties": {
+		"Name": "MaterialType",
+		"EntityType": "TABLE",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Description": "A type of material based on common characteristics, function or similar criteria.\n\nEx:\n- Solvent\n- Composition\n- Cell line catalyst\n- Intermediate\n- Impurity\n- Metabolite\n- Final intended substance\n- Resultant substance\n- Water\n- Sulphur\n- Methane\n- Carbon",
+		"TableType": "EXTERNAL",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"StorageDescriptor": {
+			"Columns": [
+				{
+					"Name": "MaterialTypeId",
+					"Description": "The unique identifier of a material type.",
+					"BaseAttributeReference": {
+						"Entity": "MaterialType.cdm.json/MaterialType",
+						"Name": "MaterialTypeId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "MaterialTypeName",
+					"Description": "The name of a material type.",
+					"BaseAttributeReference": {
+						"Entity": "MaterialType.cdm.json/MaterialType",
+						"Name": "MaterialTypeName"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 256,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "MaterialTypeDescription",
+					"Description": "The description of a material type.",
+					"BaseAttributeReference": {
+						"Entity": "MaterialType.cdm.json/MaterialType",
+						"Name": "MaterialTypeDescription"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 2048,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				}
+			],
+			"Format": {
+				"InputFormat": "org.apache.hadoop.mapred.SequenceFileInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat",
+				"FormatType": "csv",
+				"SerializeLib": "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+				"Properties": {
+					"path": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/MaterialType",
+					"delimiter": ",",
+					"multiLine": "false",
+					"firstRowAsHeader": "false",
+					"serialization.format": "1",
+					"escape": "\\",
+					"quote": "\"",
+					"FormatTypeSetToDatabaseDefault": true,
+					"header": "false"
+				}
+			},
+			"Source": {
+				"Provider": "ADLS",
+				"Location": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/MaterialType",
+				"Properties": {
+					"LinkedServiceName": "dap-synapse-test1-WorkspaceDefaultStorage",
+					"LocationSetToDatabaseDefault": true
+				}
+			},
+			"Properties": {
+				"textinputformat.record.delimiter": ",",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"MaterialTypeId\":{\"entity\":\"MaterialType.cdm.json/MaterialType\",\"name\":\"MaterialTypeId\"},\"MaterialTypeName\":{\"entity\":\"MaterialType.cdm.json/MaterialType\",\"name\":\"MaterialTypeName\"},\"MaterialTypeDescription\":{\"entity\":\"MaterialType.cdm.json/MaterialType\",\"name\":\"MaterialTypeDescription\"}}}"
+			},
+			"Compressed": false,
+			"IsStoredAsSubdirectories": false
+		},
+		"Properties": {
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"MaterialType\",\"path\":\"MaterialType.cdm.json/MaterialType\"},\"description\":\"A type of material based on common characteristics, function or similar criteria.\\n\\nEx:\\n- Solvent\\n- Composition\\n- Cell line catalyst\\n- Intermediate\\n- Impurity\\n- Metabolite\\n- Final intended substance\\n- Resultant substance\\n- Water\\n- Sulphur\\n- Methane\\n- Carbon\",\"primaryKey\":[\"MaterialTypeId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"MaterialType.cdm.json/MaterialType\",\"name\":\"MaterialTypeId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a material type.\",\"isNullable\":false,\"name\":\"MaterialTypeId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"MaterialType.cdm.json/MaterialType\",\"name\":\"MaterialTypeName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of a material type.\",\"isNullable\":true,\"name\":\"MaterialTypeName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"MaterialType.cdm.json/MaterialType\",\"name\":\"MaterialTypeDescription\"},\"dataType\":\"string\",\"dataTypeLength\":2048,\"description\":\"The description of a material type.\",\"isNullable\":true,\"name\":\"MaterialTypeDescription\"}]}}}",
+			"Description": "A type of material based on common characteristics, function or similar criteria.\n\nEx:\n- Solvent\n- Composition\n- Cell line catalyst\n- Intermediate\n- Impurity\n- Metabolite\n- Final intended substance\n- Resultant substance\n- Water\n- Sulphur\n- Methane\n- Carbon",
+			"DisplayFolderInfo": "{\"name\":\"Manufacturing\",\"colorCode\":\"#00727A\"}",
+			"PrimaryKeys": "MaterialTypeId",
+			"spark.sql.sources.provider": "csv",
+			"sql:IsAppendOnly": false
+		},
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false
+	},
+	"type": "TABLE"
+}

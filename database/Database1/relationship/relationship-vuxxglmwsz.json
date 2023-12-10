@@ -1,0 +1,26 @@
+{
+	"name": "relationship-vuxxglmwsz",
+	"properties": {
+		"Name": "relationship-vuxxglmwsz",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "ManufacturerFacility",
+		"ToTableName": "ManufacturerLot",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "ManufacturerFacilityId",
+				"ToColumnName": "ManufacturerFacilityId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"toEntity\":\"ManufacturerLot.cdm.json/ManufacturerLot\",\"joinPairs\":[{\"fromAttribute\":\"ManufacturerFacilityId\",\"toAttribute\":\"ManufacturerFacilityId\"}]}}"
+		}
+	},
+	"type": "RELATIONSHIP"
+}

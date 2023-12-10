@@ -1,0 +1,188 @@
+{
+	"name": "ManufacturerFacility",
+	"properties": {
+		"Name": "ManufacturerFacility",
+		"EntityType": "TABLE",
+		"Namespace": {
+			"DatabaseName": "Database1"
+		},
+		"Description": "A facility used by a manufacturer for the purpose of manufacturing goods.\n\nManufacturer Facility is another name for plant or site.",
+		"TableType": "EXTERNAL",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"StorageDescriptor": {
+			"Columns": [
+				{
+					"Name": "ManufacturerId",
+					"Description": "The unique identifier of a Manufacturer.",
+					"BaseAttributeReference": {
+						"Entity": "ManufacturerFacility.cdm.json/ManufacturerFacility",
+						"Name": "ManufacturerId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "ManufacturerFacilityId",
+					"Description": "The unique identifier of a Manufacturer Facility.",
+					"BaseAttributeReference": {
+						"Entity": "ManufacturerFacility.cdm.json/ManufacturerFacility",
+						"Name": "ManufacturerFacilityId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "ManufacturerFacilityName",
+					"Description": "The name of a Manufacturer Facility.",
+					"BaseAttributeReference": {
+						"Entity": "ManufacturerFacility.cdm.json/ManufacturerFacility",
+						"Name": "ManufacturerFacilityName"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 256,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "LocationId",
+					"Description": "The unique identifier of a Location.",
+					"BaseAttributeReference": {
+						"Entity": "ManufacturerFacility.cdm.json/ManufacturerFacility",
+						"Name": "LocationId"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "ManufacturerFacilityTelephoneNumber",
+					"Description": "The Manufacturer Facility's telephone number.",
+					"BaseAttributeReference": {
+						"Entity": "ManufacturerFacility.cdm.json/ManufacturerFacility",
+						"Name": "ManufacturerFacilityTelephoneNumber"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "decimal",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Precision": 15,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "decimal"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "ManufacturerFacilityFaxNumber",
+					"Description": "The Manufacturer Facility's fax number.",
+					"BaseAttributeReference": {
+						"Entity": "ManufacturerFacility.cdm.json/ManufacturerFacility",
+						"Name": "ManufacturerFacilityFaxNumber"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "decimal",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Precision": 15,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "decimal"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "ManufacturerFacilityEmailAddress",
+					"Description": "The Manufacturer Facility's email address.",
+					"BaseAttributeReference": {
+						"Entity": "ManufacturerFacility.cdm.json/ManufacturerFacility",
+						"Name": "ManufacturerFacilityEmailAddress"
+					},
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 256,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				}
+			],
+			"Format": {
+				"InputFormat": "org.apache.hadoop.mapred.SequenceFileInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat",
+				"FormatType": "csv",
+				"SerializeLib": "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+				"Properties": {
+					"path": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/ManufacturerFacility",
+					"delimiter": ",",
+					"multiLine": "false",
+					"firstRowAsHeader": "false",
+					"serialization.format": "1",
+					"escape": "\\",
+					"quote": "\"",
+					"FormatTypeSetToDatabaseDefault": true,
+					"header": "false"
+				}
+			},
+			"Source": {
+				"Provider": "ADLS",
+				"Location": "abfss://dapfstest01@dapsatest01.dfs.core.windows.net/Database1/ManufacturerFacility",
+				"Properties": {
+					"LinkedServiceName": "dap-synapse-test1-WorkspaceDefaultStorage",
+					"LocationSetToDatabaseDefault": true
+				}
+			},
+			"Properties": {
+				"textinputformat.record.delimiter": ",",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"ManufacturerId\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerId\"},\"ManufacturerFacilityId\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityId\"},\"ManufacturerFacilityName\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityName\"},\"LocationId\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"LocationId\"},\"ManufacturerFacilityTelephoneNumber\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityTelephoneNumber\"},\"ManufacturerFacilityFaxNumber\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityFaxNumber\"},\"ManufacturerFacilityEmailAddress\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityEmailAddress\"}}}"
+			},
+			"Compressed": false,
+			"IsStoredAsSubdirectories": false
+		},
+		"Properties": {
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"ManufacturerFacility\",\"path\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\"},\"description\":\"A facility used by a manufacturer for the purpose of manufacturing goods.\\n\\nManufacturer Facility is another name for plant or site.\",\"primaryKey\":[\"ManufacturerId\",\"ManufacturerFacilityId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Manufacturer.\",\"isNullable\":false,\"name\":\"ManufacturerId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Manufacturer Facility.\",\"isNullable\":false,\"name\":\"ManufacturerFacilityId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of a Manufacturer Facility.\",\"isNullable\":true,\"name\":\"ManufacturerFacilityName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"LocationId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Location.\",\"isNullable\":true,\"name\":\"LocationId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityTelephoneNumber\"},\"dataType\":\"decimal\",\"dataTypeLength\":15,\"description\":\"The Manufacturer Facility's telephone number.\",\"isNullable\":true,\"scale\":0,\"name\":\"ManufacturerFacilityTelephoneNumber\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityFaxNumber\"},\"dataType\":\"decimal\",\"dataTypeLength\":15,\"description\":\"The Manufacturer Facility's fax number.\",\"isNullable\":true,\"scale\":0,\"name\":\"ManufacturerFacilityFaxNumber\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"ManufacturerFacility.cdm.json/ManufacturerFacility\",\"name\":\"ManufacturerFacilityEmailAddress\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The Manufacturer Facility's email address.\",\"isNullable\":true,\"name\":\"ManufacturerFacilityEmailAddress\"}]}}}",
+			"Description": "A facility used by a manufacturer for the purpose of manufacturing goods.\n\nManufacturer Facility is another name for plant or site.",
+			"DisplayFolderInfo": "{\"name\":\"Manufacturing\",\"colorCode\":\"#00727A\"}",
+			"PrimaryKeys": "ManufacturerId,ManufacturerFacilityId",
+			"spark.sql.sources.provider": "csv",
+			"sql:IsAppendOnly": false
+		},
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false
+	},
+	"type": "TABLE"
+}
