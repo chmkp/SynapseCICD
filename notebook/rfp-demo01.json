@@ -1,0 +1,609 @@
+{
+	"name": "rfp-demo01",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "dapsparktest1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "0a01e75c-0dda-47e7-a21a-cc22680bf57c"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1",
+				"state": {
+					"9d70eea0-f453-4c4f-b0fc-63563c3966c5": {
+						"type": "Synapse.DataFrame",
+						"sync_state": {
+							"table": {
+								"rows": [
+									{
+										"0": "1",
+										"1": "iPhone 9",
+										"2": "An apple mobile which is nothing like apple",
+										"3": "549",
+										"4": "12.96",
+										"5": "4.69",
+										"6": "94",
+										"7": "Apple",
+										"8": "smartphones",
+										"9": "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+									},
+									{
+										"0": "2",
+										"1": "iPhone X",
+										"2": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+										"3": "899",
+										"4": "17.94",
+										"5": "4.44",
+										"6": "34",
+										"7": "Apple",
+										"8": "smartphones",
+										"9": "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+									},
+									{
+										"0": "3",
+										"1": "Samsung Universe 9",
+										"2": "Samsung's new variant which goes beyond Galaxy to the Universe",
+										"3": "1249",
+										"4": "15.46",
+										"5": "4.09",
+										"6": "36",
+										"7": "Samsung",
+										"8": "smartphones",
+										"9": "https://i.dummyjson.com/data/products/3/thumbnail.jpg"
+									},
+									{
+										"0": "4",
+										"1": "OPPOF19",
+										"2": "OPPO F19 is officially announced on April 2021.",
+										"3": "280",
+										"4": "17.91",
+										"5": "4.3",
+										"6": "123",
+										"7": "OPPO",
+										"8": "smartphones",
+										"9": "https://i.dummyjson.com/data/products/4/thumbnail.jpg"
+									},
+									{
+										"0": "5",
+										"1": "Huawei P30",
+										"2": "Huawei’s re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
+										"3": "499",
+										"4": "10.58",
+										"5": "4.09",
+										"6": "32",
+										"7": "Huawei",
+										"8": "smartphones",
+										"9": "https://i.dummyjson.com/data/products/5/thumbnail.jpg"
+									},
+									{
+										"0": "6",
+										"1": "MacBook Pro",
+										"2": "MacBook Pro 2021 with mini-LED display may launch between September, November",
+										"3": "1749",
+										"4": "11.02",
+										"5": "4.57",
+										"6": "83",
+										"7": "Apple",
+										"8": "laptops",
+										"9": "https://i.dummyjson.com/data/products/6/thumbnail.png"
+									},
+									{
+										"0": "7",
+										"1": "Samsung Galaxy Book",
+										"2": "Samsung Galaxy Book S (2020) Laptop With Intel Lakefield Chip, 8GB of RAM Launched",
+										"3": "1499",
+										"4": "4.15",
+										"5": "4.25",
+										"6": "50",
+										"7": "Samsung",
+										"8": "laptops",
+										"9": "https://i.dummyjson.com/data/products/7/thumbnail.jpg"
+									},
+									{
+										"0": "8",
+										"1": "Microsoft Surface Laptop 4",
+										"2": "Style and speed. Stand out on HD video calls backed by Studio Mics. Capture ideas on the vibrant touchscreen.",
+										"3": "1499",
+										"4": "10.23",
+										"5": "4.43",
+										"6": "68",
+										"7": "Microsoft Surface",
+										"8": "laptops",
+										"9": "https://i.dummyjson.com/data/products/8/thumbnail.jpg"
+									},
+									{
+										"0": "9",
+										"1": "Infinix INBOOK",
+										"2": "Infinix Inbook X1 Ci3 10th 8GB 256GB 14 Win10 Grey – 1 Year Warranty",
+										"3": "1099",
+										"4": "11.83",
+										"5": "4.54",
+										"6": "96",
+										"7": "Infinix",
+										"8": "laptops",
+										"9": "https://i.dummyjson.com/data/products/9/thumbnail.jpg"
+									},
+									{
+										"0": "10",
+										"1": "HP Pavilion 15-DK1056WM",
+										"2": "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
+										"3": "1099",
+										"4": "6.18",
+										"5": "4.43",
+										"6": "89",
+										"7": "HP Pavilion",
+										"8": "laptops",
+										"9": "https://i.dummyjson.com/data/products/10/thumbnail.jpeg"
+									},
+									{
+										"0": "11",
+										"1": "perfume Oil",
+										"2": "Mega Discount, Impression of Acqua Di Gio by GiorgioArmani concentrated attar perfume Oil",
+										"3": "13",
+										"4": "8.4",
+										"5": "4.26",
+										"6": "65",
+										"7": "Impression of Acqua Di Gio",
+										"8": "fragrances",
+										"9": "https://i.dummyjson.com/data/products/11/thumbnail.jpg"
+									},
+									{
+										"0": "12",
+										"1": "Brown Perfume",
+										"2": "Royal_Mirage Sport Brown Perfume for Men & Women - 120ml",
+										"3": "40",
+										"4": "15.66",
+										"5": "4.0",
+										"6": "52",
+										"7": "Royal_Mirage",
+										"8": "fragrances",
+										"9": "https://i.dummyjson.com/data/products/12/thumbnail.jpg"
+									},
+									{
+										"0": "13",
+										"1": "Fog Scent Xpressio Perfume",
+										"2": "Product details of Best Fog Scent Xpressio Perfume 100ml For Men cool long lasting perfumes for Men",
+										"3": "13",
+										"4": "8.14",
+										"5": "4.59",
+										"6": "61",
+										"7": "Fog Scent Xpressio",
+										"8": "fragrances",
+										"9": "https://i.dummyjson.com/data/products/13/thumbnail.webp"
+									},
+									{
+										"0": "14",
+										"1": "Non-Alcoholic Concentrated Perfume Oil",
+										"2": "Original Al Munakh® by Mahal Al Musk | Our Impression of Climate | 6ml Non-Alcoholic Concentrated Perfume Oil",
+										"3": "120",
+										"4": "15.6",
+										"5": "4.21",
+										"6": "114",
+										"7": "Al Munakh",
+										"8": "fragrances",
+										"9": "https://i.dummyjson.com/data/products/14/thumbnail.jpg"
+									},
+									{
+										"0": "15",
+										"1": "Eau De Perfume Spray",
+										"2": "Genuine  Al-Rehab spray perfume from UAE/Saudi Arabia/Yemen High Quality",
+										"3": "30",
+										"4": "10.99",
+										"5": "4.7",
+										"6": "105",
+										"7": "Lord - Al-Rehab",
+										"8": "fragrances",
+										"9": "https://i.dummyjson.com/data/products/15/thumbnail.jpg"
+									},
+									{
+										"0": "16",
+										"1": "Hyaluronic Acid Serum",
+										"2": "L'OrÃ©al Paris introduces Hyaluron Expert Replumping Serum formulated with 1.5% Hyaluronic Acid",
+										"3": "19",
+										"4": "13.31",
+										"5": "4.83",
+										"6": "110",
+										"7": "L'Oreal Paris",
+										"8": "skincare",
+										"9": "https://i.dummyjson.com/data/products/16/thumbnail.jpg"
+									},
+									{
+										"0": "17",
+										"1": "Tree Oil 30ml",
+										"2": "Tea tree oil contains a number of compounds, including terpinen-4-ol, that have been shown to kill certain bacteria,",
+										"3": "12",
+										"4": "4.09",
+										"5": "4.52",
+										"6": "78",
+										"7": "Hemani Tea",
+										"8": "skincare",
+										"9": "https://i.dummyjson.com/data/products/17/thumbnail.jpg"
+									},
+									{
+										"0": "18",
+										"1": "Oil Free Moisturizer 100ml",
+										"2": "Dermive Oil Free Moisturizer with SPF 20 is specifically formulated with ceramides, hyaluronic acid & sunscreen.",
+										"3": "40",
+										"4": "13.1",
+										"5": "4.56",
+										"6": "88",
+										"7": "Dermive",
+										"8": "skincare",
+										"9": "https://i.dummyjson.com/data/products/18/thumbnail.jpg"
+									},
+									{
+										"0": "19",
+										"1": "Skin Beauty Serum.",
+										"2": "Product name: rorec collagen hyaluronic acid white face serum riceNet weight: 15 m",
+										"3": "46",
+										"4": "10.68",
+										"5": "4.42",
+										"6": "54",
+										"7": "ROREC White Rice",
+										"8": "skincare",
+										"9": "https://i.dummyjson.com/data/products/19/thumbnail.jpg"
+									},
+									{
+										"0": "20",
+										"1": "Freckle Treatment Cream- 15gm",
+										"2": "Fair & Clear is Pakistan's only pure Freckle cream which helpsfade Freckles, Darkspots and pigments. Mercury level is 0%, so there are no side effects.",
+										"3": "70",
+										"4": "16.99",
+										"5": "4.06",
+										"6": "140",
+										"7": "Fair & Clear",
+										"8": "skincare",
+										"9": "https://i.dummyjson.com/data/products/20/thumbnail.jpg"
+									},
+									{
+										"0": "21",
+										"1": "- Daal Masoor 500 grams",
+										"2": "Fine quality Branded Product Keep in a cool and dry place",
+										"3": "20",
+										"4": "4.81",
+										"5": "4.44",
+										"6": "133",
+										"7": "Saaf & Khaas",
+										"8": "groceries",
+										"9": "https://i.dummyjson.com/data/products/21/thumbnail.png"
+									},
+									{
+										"0": "22",
+										"1": "Elbow Macaroni - 400 gm",
+										"2": "Product details of Bake Parlor Big Elbow Macaroni - 400 gm",
+										"3": "14",
+										"4": "15.58",
+										"5": "4.57",
+										"6": "146",
+										"7": "Bake Parlor Big",
+										"8": "groceries",
+										"9": "https://i.dummyjson.com/data/products/22/thumbnail.jpg"
+									},
+									{
+										"0": "23",
+										"1": "Orange Essence Food Flavou",
+										"2": "Specifications of Orange Essence Food Flavour For Cakes and Baking Food Item",
+										"3": "14",
+										"4": "8.04",
+										"5": "4.85",
+										"6": "26",
+										"7": "Baking Food Items",
+										"8": "groceries",
+										"9": "https://i.dummyjson.com/data/products/23/thumbnail.jpg"
+									},
+									{
+										"0": "24",
+										"1": "cereals muesli fruit nuts",
+										"2": "original fauji cereal muesli 250gm box pack original fauji cereals muesli fruit nuts flakes breakfast cereal break fast faujicereals cerels cerel foji fouji",
+										"3": "46",
+										"4": "16.8",
+										"5": "4.94",
+										"6": "113",
+										"7": "fauji",
+										"8": "groceries",
+										"9": "https://i.dummyjson.com/data/products/24/thumbnail.jpg"
+									},
+									{
+										"0": "25",
+										"1": "Gulab Powder 50 Gram",
+										"2": "Dry Rose Flower Powder Gulab Powder 50 Gram • Treats Wounds",
+										"3": "70",
+										"4": "13.58",
+										"5": "4.87",
+										"6": "47",
+										"7": "Dry Rose",
+										"8": "groceries",
+										"9": "https://i.dummyjson.com/data/products/25/thumbnail.jpg"
+									},
+									{
+										"0": "26",
+										"1": "Plant Hanger For Home",
+										"2": "Boho Decor Plant Hanger For Home Wall Decoration Macrame Wall Hanging Shelf",
+										"3": "41",
+										"4": "17.86",
+										"5": "4.08",
+										"6": "131",
+										"7": "Boho Decor",
+										"8": "home-decoration",
+										"9": "https://i.dummyjson.com/data/products/26/thumbnail.jpg"
+									},
+									{
+										"0": "27",
+										"1": "Flying Wooden Bird",
+										"2": "Package Include 6 Birds with Adhesive Tape Shape: 3D Shaped Wooden Birds Material: Wooden MDF, Laminated 3.5mm",
+										"3": "51",
+										"4": "15.58",
+										"5": "4.41",
+										"6": "17",
+										"7": "Flying Wooden",
+										"8": "home-decoration",
+										"9": "https://i.dummyjson.com/data/products/27/thumbnail.webp"
+									},
+									{
+										"0": "28",
+										"1": "3D Embellishment Art Lamp",
+										"2": "3D led lamp sticker Wall sticker 3d wall art light on/off button  cell operated (included)",
+										"3": "20",
+										"4": "16.49",
+										"5": "4.82",
+										"6": "54",
+										"7": "LED Lights",
+										"8": "home-decoration",
+										"9": "https://i.dummyjson.com/data/products/28/thumbnail.jpg"
+									},
+									{
+										"0": "29",
+										"1": "Handcraft Chinese style",
+										"2": "Handcraft Chinese style art luxury palace hotel villa mansion home decor ceramic vase with brass fruit plate",
+										"3": "60",
+										"4": "15.34",
+										"5": "4.44",
+										"6": "7",
+										"7": "luxury palace",
+										"8": "home-decoration",
+										"9": "https://i.dummyjson.com/data/products/29/thumbnail.webp"
+									},
+									{
+										"0": "30",
+										"1": "Key Holder",
+										"2": "Attractive DesignMetallic materialFour key hooksReliable & DurablePremium Quality",
+										"3": "30",
+										"4": "2.92",
+										"5": "4.92",
+										"6": "54",
+										"7": "Golden",
+										"8": "home-decoration",
+										"9": "https://i.dummyjson.com/data/products/30/thumbnail.jpg"
+									}
+								],
+								"schema": [
+									{
+										"key": "0",
+										"name": "id",
+										"type": "bigint"
+									},
+									{
+										"key": "1",
+										"name": "title",
+										"type": "string"
+									},
+									{
+										"key": "2",
+										"name": "description",
+										"type": "string"
+									},
+									{
+										"key": "3",
+										"name": "price",
+										"type": "bigint"
+									},
+									{
+										"key": "4",
+										"name": "discountPercentage",
+										"type": "double"
+									},
+									{
+										"key": "5",
+										"name": "rating",
+										"type": "double"
+									},
+									{
+										"key": "6",
+										"name": "stock",
+										"type": "bigint"
+									},
+									{
+										"key": "7",
+										"name": "brand",
+										"type": "string"
+									},
+									{
+										"key": "8",
+										"name": "category",
+										"type": "string"
+									},
+									{
+										"key": "9",
+										"name": "thumbnail",
+										"type": "string"
+									}
+								],
+								"truncated": false
+							},
+							"isSummary": false,
+							"language": "scala"
+						},
+						"persist_state": {
+							"view": {
+								"type": "details",
+								"chartOptions": {
+									"chartType": "bar",
+									"aggregationType": "sum",
+									"categoryFieldKeys": [
+										"1"
+									],
+									"seriesFieldKeys": [
+										"0"
+									],
+									"isStacked": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/ec88d831-317e-4fbd-b537-6a0ff8dca394/resourceGroups/rsg-dap-test/providers/Microsoft.Synapse/workspaces/dap-synapse-test1/bigDataPools/dapsparktest1",
+				"name": "dapsparktest1",
+				"type": "Spark",
+				"endpoint": "https://dap-synapse-test1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/dapsparktest1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.3",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"import requests\r\n",
+					"import pandas as pd \r\n",
+					"import azure.storage\r\n",
+					"import org.apache.spark.sql\r\n",
+					"from azure.storage.blob import BlobServiceClient, generate_account_sas, ResourceTypes, AccountSasPermissions\r\n",
+					"from pyspark.sql import SparkSession"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"url = \"https://dummyjson.com/products\"\r\n",
+					"response = requests.get(url)\r\n",
+					"if response.status_code == 200:\r\n",
+					"    data = response.json()\r\n",
+					"else:\r\n",
+					"    print(\"Failed to fetch data from the API. Status code:\", response.status_code)"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df = pd.DataFrame(data['products'])\r\n",
+					"del df['images']"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(df)"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"accountKey = 'i0xmRxklcre7BXgl44/gpnYZN2HnUWkhJ6oqIqLyM77ZKoxhaZBxoRR2PkSjQtniu8dznD1flqxV+ASt6HL2RA=='"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df.to_csv('abfss://dapfstest01@dapsatest01.dfs.core.windows.net/rfpdemo/output.csv', storage_options = {'accountKey': accountKey})"
+				],
+				"execution_count": 6
+			}
+		]
+	}
+}

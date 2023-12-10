@@ -1,0 +1,17 @@
+{
+	"name": "user-create-script",
+	"properties": {
+		"content": {
+			"query": "EXEC sp_addrolemember 'db_datareader', ServiceAttendant; \nEXEC sp_addrolemember 'db_datareader', ServiceLead;\nEXEC sp_addrolemember 'db_datareader', ServiceManager;\nEXEC sp_addrolemember 'db_datareader', ServiceHead;\n\nDENY unmask ON Dbo.person(salary) TO ServiceAttendant;\n\nGRANT unmask ON Dbo.person(salary) TO ServiceLead;\n\n\nEXECUTE AS USER = 'ServiceLead';\n\nSELECT *\nFROM dbo.Person;\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dapsqlpooltest1",
+				"poolName": "dapsqlpooltest1"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

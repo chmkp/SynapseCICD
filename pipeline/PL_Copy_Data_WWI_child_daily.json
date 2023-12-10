@@ -1,0 +1,75 @@
+{
+	"name": "PL_Copy_Data_WWI_child_daily",
+	"properties": {
+		"description": "This is a child pipeline which will be invoke from master pipeline and execute staging pipeline",
+		"activities": [
+			{
+				"name": "Persistent Staging Processing",
+				"description": "This pipeline process extract data from source system and copy into data lake landing zone and process staging ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_Copy_Data_WWI_staging_daily",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"pPipelineRunId": {
+							"value": "@pipeline().parameters.pMasterPipelineRunId",
+							"type": "Expression"
+						},
+						"pModule": {
+							"value": "@pipeline().parameters.p_Module",
+							"type": "Expression"
+						},
+						"pSourceSystem": {
+							"value": "@pipeline().parameters.pSourceSystem",
+							"type": "Expression"
+						},
+						"pLoadType": {
+							"value": "@pipeline().parameters.pLoadType",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"pMasterPipelineRunId": {
+				"type": "string"
+			},
+			"p_Module": {
+				"type": "string"
+			},
+			"pSourceSystem": {
+				"type": "string"
+			},
+			"pLoadType": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"vSourceSQL": {
+				"type": "String",
+				"defaultValue": "select getdate()"
+			},
+			"vRawFileName": {
+				"type": "String"
+			},
+			"vKeycolumn": {
+				"type": "Array",
+				"defaultValue": [
+					"Id"
+				]
+			}
+		},
+		"folder": {
+			"name": "Data-Acquisition/Azure DB-WWI"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-12-06T22:41:01Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

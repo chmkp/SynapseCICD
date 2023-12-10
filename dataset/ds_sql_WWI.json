@@ -1,0 +1,21 @@
+{
+	"name": "ds_sql_WWI",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_WWI",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SchemaName": {
+				"type": "string"
+			},
+			"TableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

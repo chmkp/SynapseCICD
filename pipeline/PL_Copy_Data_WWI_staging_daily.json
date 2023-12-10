@@ -1,0 +1,1011 @@
+{
+	"name": "PL_Copy_Data_WWI_staging_daily",
+	"properties": {
+		"description": "This pipeline hold actual processing logic",
+		"activities": [
+			{
+				"name": "Get List of Sources",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Start Logging - Landing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"sqlReaderQuery": {
+							"value": "SELECT [controlid],\n       [sourcename],\n       [sourcedatabase],\n       [sourceschemaname],\n       [sourcetablename],\n       [StagingSchemaName],\n       [StagingTableName],\n       [PersistentStagingSchemaName],\n       [PersistentStagingTableName]       \n       [incrementalload],\n\t   [sourcecolumns],\n\t   [watermarkcolumn],\n\t   [watermarkvalue],\n           [KeyColumn],\n       CASE\n         WHEN [incrementalload] = 'Y' THEN\n         'Select ' + [sourcecolumns] + ' From '\n         + [sourceschemaname] + '.' + [sourcetablename]\n         + ' Where ' + [watermarkcolumn] + ' >' + ''''\n         + CONVERT(VARCHAR, Cast(COALESCE(watermarkvalue, '01/01/1900') AS\n         DATETIME),\n         120)\n         + ''''\n         ELSE 'Select ' + [sourcecolumns] + ' From '\n              + [sourceschemaname] + '.' + [sourcetablename]\n       END     AS SourceQuery,\n       'data' AS DataLakeRootFolder,\n       [datalakefolder],\n       [PersistentStagingStoredProcName],\n       [lastrefreshedon],\n       [lastrefreshstatus]\nFROM   [Control].[ingestionconfig]\nWHERE  1 = 1\n       AND [enabled] = 'Y'\n       AND [frequency] = '@{pipeline().parameters.pLoadType}'\n       AND [SourceName] ='@{pipeline().parameters.pSourceSystem}'\n       AND [Module]='@{pipeline().parameters.pModule}'",
+							"type": "Expression"
+						},
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_asqlmi_dap",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "Control",
+							"TableName": "IngestionConfig"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Landing Processing",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get List of Sources",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get List of Sources').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Generate Parquet File",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Set Filename",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "@item().SourceQuery",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_sql_WWI",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": {
+											"value": "@item().SourceSchemaName",
+											"type": "Expression"
+										},
+										"TableName": {
+											"value": "@item().SourceTableName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"pContainer": {
+											"value": "@item().DataLakeRootFolder",
+											"type": "Expression"
+										},
+										"pDirectory": {
+											"value": "@concat(item().DatalakeFolder,'/',item().SourceName,'/',\nitem().SourceTableName,'/yyyy=',formatDateTime(utcnow(),'yyyy'),'/mm=',formatDateTime(utcnow(),'MM'),'/dd=',formatDateTime(utcnow(),'dd')\n) ",
+											"type": "Expression"
+										},
+										"pFilename": {
+											"value": "@variables('vRawFileName')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Transient TableLoad",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Generate Parquet File",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "ParquetReadSettings"
+									}
+								},
+								"sink": {
+									"type": "SqlMISink",
+									"preCopyScript": {
+										"value": "if object_id('@{item().StagingSchemaName}.@{item().StagingTableName}') is not null\nTruncate table @{item().StagingSchemaName}.@{item().StagingTableName}",
+										"type": "Expression"
+									},
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"pContainer": {
+											"value": "@item().DataLakeRootFolder",
+											"type": "Expression"
+										},
+										"pDirectory": {
+											"value": "@concat(item().DatalakeFolder,'/',item().SourceName,'/',\nitem().SourceTableName,'/yyyy=',formatDateTime(utcnow(),'yyyy'),'/mm=',formatDateTime(utcnow(),'MM'),'/dd=',formatDateTime(utcnow(),'dd')\n) ",
+											"type": "Expression"
+										},
+										"pFilename": {
+											"value": "@variables('vRawFileName')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_asqlmi_dap",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": {
+											"value": "@item().StagingSchemaName       ",
+											"type": "Expression"
+										},
+										"TableName": {
+											"value": "@item().StagingTableName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Set Filename",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Update Ingestion - Landing Started",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "vRawFileName",
+								"value": {
+									"value": "@concat(item().SourceSchemaName,'_',item().SourceTableName,'_',\naddhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10),'.parquet')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Delete File",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Transient TableLoad",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"pContainer": {
+											"value": "@item().DataLakeRootFolder",
+											"type": "Expression"
+										},
+										"pDirectory": {
+											"value": "@concat(item().DatalakeFolder,'/',item().SourceName,'/',\nitem().SourceTableName)",
+											"type": "Expression"
+										},
+										"pFilename": {
+											"value": "@variables('vRawFileName')",
+											"type": "Expression"
+										}
+									}
+								},
+								"logStorageSettings": {
+									"linkedServiceName": {
+										"referenceName": "ls_adls_raw",
+										"type": "LinkedServiceReference"
+									},
+									"path": {
+										"value": "@concat(item().DataLakeRootFolder,'/',item().DatalakeFolder,'/Rejects')",
+										"type": "Expression"
+									}
+								},
+								"enableLogging": true,
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
+						},
+						{
+							"name": "Update Ingestion - Failed",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Transient TableLoad",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[Control].[usp_update_watermark]",
+								"storedProcedureParameters": {
+									"SourceName": {
+										"value": {
+											"value": "@item().SourceName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": "Failed",
+										"type": "String"
+									},
+									"TableName": {
+										"value": {
+											"value": "@item().SourceTableName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"PipelineRunID": {
+										"value": {
+											"value": "@pipeline().parameters.pPipelineRunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_asqlmi_dap",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Update Ingestion - Landing Complete",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Transient TableLoad",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[Control].[usp_update_watermark]",
+								"storedProcedureParameters": {
+									"SourceName": {
+										"value": {
+											"value": "@item().SourceName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": "Landing",
+										"type": "String"
+									},
+									"TableName": {
+										"value": {
+											"value": "@item().SourceTableName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"PipelineRunID": {
+										"value": {
+											"value": "@pipeline().parameters.pPipelineRunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_asqlmi_dap",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Update Ingestion - Landing Started",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[Control].[usp_update_watermark]",
+								"storedProcedureParameters": {
+									"SourceName": {
+										"value": {
+											"value": "@item().SourceName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": "Started",
+										"type": "String"
+									},
+									"TableName": {
+										"value": {
+											"value": "@item().SourceTableName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"PipelineRunID": {
+										"value": {
+											"value": "@pipeline().parameters.pPipelineRunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_asqlmi_dap",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Start Logging - Landing",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": null,
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Stage2-Started",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": null,
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().parameters.pPipelineRunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "In Progress",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Complete Logs - Landing",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Landing Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": null,
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Stage2-Finished",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": null,
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().parameters.pPipelineRunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "Complete",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "PersistentStaging Processing",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Start Logging - PersistentStaging",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get List of Sources').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Merging Stage Data",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": {
+									"value": "@item().PersistentStagingStoredProcName",
+									"type": "Expression"
+								},
+								"storedProcedureParameters": {
+									"LandingParquetFile": {
+										"value": {
+											"value": "@concat(item().DataLakeRootFolder,'/',item().DatalakeFolder,'/',\nitem().SourceName,'/',item().SourceTableName,'/',\nvariables('vRawFileName'))\n\n\n",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"PipelineRunID": {
+										"value": {
+											"value": "@pipeline().parameters.pPipelineRunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"SourceName": {
+										"value": {
+											"value": "@item().SourceName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"TableName": {
+										"value": {
+											"value": "@item().SourceTableName",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_asqlmi_dap",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Start Logging - PersistentStaging",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Complete Logs - Landing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": null,
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Stage3-Started",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": null,
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().parameters.pPipelineRunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "In Progress",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Complete Logs - PersistentStaging",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "PersistentStaging Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": null,
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Stage3-Finished",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": null,
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().parameters.pPipelineRunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "Complete",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Failed Logs - PersistentStaging",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "PersistentStaging Processing",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": null,
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Stage3-Finished",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": null,
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().parameters.pPipelineRunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "Failed",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Failed Logs - Landing",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Landing Processing",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": null,
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Stage2-Finished",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": null,
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().parameters.pPipelineRunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "Failed",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"pPipelineRunId": {
+				"type": "string",
+				"defaultValue": "1001"
+			},
+			"pModule": {
+				"type": "string",
+				"defaultValue": "Facilty"
+			},
+			"pSourceSystem": {
+				"type": "string"
+			},
+			"pLoadType": {
+				"type": "string",
+				"defaultValue": "Weekly"
+			}
+		},
+		"variables": {
+			"vSourceSQL": {
+				"type": "String",
+				"defaultValue": "select getdate()"
+			},
+			"vRawFileName": {
+				"type": "String"
+			},
+			"vKeycolumn": {
+				"type": "Array",
+				"defaultValue": [
+					"Id"
+				]
+			},
+			"vReturnCode": {
+				"type": "Boolean"
+			}
+		},
+		"folder": {
+			"name": "Data-Acquisition/Azure DB-WWI"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-12-06T22:40:24Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

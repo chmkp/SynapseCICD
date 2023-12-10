@@ -1,0 +1,42 @@
+{
+	"name": "PL_Copy_Data_using_Synapse Notebook",
+	"properties": {
+		"activities": [
+			{
+				"name": "Storing API result in csv file",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "rfp-demo01",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "dapsparktest1",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
+					"conf": {
+						"spark.dynamicAllocation.enabled": false
+					},
+					"driverSize": "Small"
+				}
+			}
+		],
+		"folder": {
+			"name": "Notebook Samples"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-12-06T22:45:00Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

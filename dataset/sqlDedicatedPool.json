@@ -1,0 +1,17 @@
+{
+	"name": "sqlDedicatedPool",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Product"
+		},
+		"sqlPool": {
+			"referenceName": "dapsqlpooltest1",
+			"type": "SqlPoolReference"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

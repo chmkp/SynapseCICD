@@ -1,0 +1,11 @@
+{
+	"name": "LS_AKV",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://dap-akv.vault.azure.net/"
+		}
+	}
+}

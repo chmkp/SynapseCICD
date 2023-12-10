@@ -1,0 +1,435 @@
+{
+	"name": "PL_Master_Copy_Data_Jobs_daily",
+	"properties": {
+		"description": "This is generic data-driven ingestions pipeline for source system iMIS data extract ",
+		"activities": [
+			{
+				"name": "Master",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Start Logging",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_Copy_Data_Jobs_child_daily",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"pMasterPipelineRunId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"p_Module": {
+							"value": "@pipeline().parameters.pModule",
+							"type": "Expression"
+						},
+						"pSourceSystem": {
+							"value": "@pipeline().parameters.pSourceSystem",
+							"type": "Expression"
+						},
+						"pLoadType": {
+							"value": "@pipeline().parameters.pLoadType",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Exception Logs",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Master",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": null,
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": {
+								"value": "@concat('Pipeline failed :',activity('Master').output.pipelineName, activity('Master').error.message\n)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Exception",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": null,
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "Failed",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": null,
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Start Logging",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+					"storedProcedureParameters": {
+						"CompleteDateTime": {
+							"value": null,
+							"type": "String"
+						},
+						"DataFactoryName": {
+							"value": {
+								"value": "@pipeline().DataFactory",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"ExecutionDateTime": {
+							"value": {
+								"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"LoggingStage": {
+							"value": "Stage1",
+							"type": "String"
+						},
+						"PipelineName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"runid": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Status": {
+							"value": "In Progress",
+							"type": "String"
+						},
+						"TriggerTime": {
+							"value": {
+								"value": "@pipeline().TriggerTime",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_asqlmi_dap",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Check Logs for Partial Complete",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Master",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlMISource",
+						"sqlReaderQuery": {
+							"value": "select count(*) as IncompleteProcessCount from [Logs].[ProcessLogs] where  status='Error' and pipeline_run_id='@{pipeline().RunId}'",
+							"type": "Expression"
+						},
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_asqlmi_dap",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "dbo",
+							"TableName": "Payment"
+						}
+					}
+				}
+			},
+			{
+				"name": "Check Condition",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Check Logs for Partial Complete",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(activity('Check Logs for Partial Complete').output.firstRow.IncompleteProcessCount,0)\n\n",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Partial_Complete Logs",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+								"storedProcedureParameters": {
+									"CompleteDateTime": {
+										"value": {
+											"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"DataFactoryName": {
+										"value": {
+											"value": "@pipeline().DataFactory",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"ErrorMessage": {
+										"value": null,
+										"type": "String"
+									},
+									"ExecutionDateTime": {
+										"value": null,
+										"type": "String"
+									},
+									"LoggingStage": {
+										"value": "Final-Stage",
+										"type": "String"
+									},
+									"PipelineName": {
+										"value": null,
+										"type": "String"
+									},
+									"runid": {
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": "Partial Complete",
+										"type": "String"
+									},
+									"TriggerTime": {
+										"value": null,
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_asqlmi_dap",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Complete Logs",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[Logs].[usp_ExceptionLog]",
+								"storedProcedureParameters": {
+									"CompleteDateTime": {
+										"value": {
+											"value": "@addhours(formatDateTime(utcnow(),'yyyy-MM-dd HH:mm:ss'),10)",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"DataFactoryName": {
+										"value": {
+											"value": "@pipeline().DataFactory",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"ErrorMessage": {
+										"value": null,
+										"type": "String"
+									},
+									"ExecutionDateTime": {
+										"value": null,
+										"type": "String"
+									},
+									"LoggingStage": {
+										"value": "Final-Stage",
+										"type": "String"
+									},
+									"PipelineName": {
+										"value": null,
+										"type": "String"
+									},
+									"runid": {
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": "Complete",
+										"type": "String"
+									},
+									"TriggerTime": {
+										"value": null,
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_asqlmi_dap",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"pRootFolder": {
+				"type": "string",
+				"defaultValue": "data"
+			},
+			"pRawFolder": {
+				"type": "string",
+				"defaultValue": "datasources/JobAdder"
+			},
+			"pEmail": {
+				"type": "string",
+				"defaultValue": "mohan.chinthakayala@brennanit.com.au"
+			},
+			"pCustomFailureMessage": {
+				"type": "string",
+				"defaultValue": "The pipeline has crashed!"
+			},
+			"pModule": {
+				"type": "string",
+				"defaultValue": "N/A"
+			},
+			"pSourceSystem": {
+				"type": "string",
+				"defaultValue": "JobAdder"
+			},
+			"pLoadType": {
+				"type": "string",
+				"defaultValue": "Daily"
+			}
+		},
+		"variables": {
+			"vRawFileName": {
+				"type": "String"
+			},
+			"vKeycolumn": {
+				"type": "Array",
+				"defaultValue": [
+					"Id"
+				]
+			}
+		},
+		"folder": {
+			"name": "Data-Acquisition/Job Adder"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-12-06T22:48:29Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
